@@ -25,7 +25,14 @@ connection.query("SELECT * FROM products", function(err, result){
             message: "How many would you like to purchase?"
         }
     ]).then(function(answers){
-        console.log(answers.itemNum);
-        console.log(answers.quantity);
+        // console.log(answers.itemNum);
+        // console.log(result[0])
+        var chosenItem;
+        for (var i = 0; i < result.length; i++){
+            if (result[i].id === parseInt(answers.itemNum)){
+                chosenItem = result[i];
+            }
+        }
+        console.log(chosenItem);
     })
 })
