@@ -3,6 +3,7 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 var cTable = require("console.table");
 var chalk = require("chalk");
+var table = require("table");
 
 //connecting to the database
 var connection = mysql.createConnection({
@@ -73,6 +74,24 @@ function buyItem(){
                 console.log(chalk.green("======================="));
                 console.log(chalk.green("Order fulfilled.\nYour total is " + (chosenItem.price * parseInt(answers.quantity))));
                 console.log(chalk.green("======================="));
+
+                var newQty = parseInt(chosenItem.stock_quantity) - parseInt(answers.quantity);
+                // console.log(newQty);
+
+
+                connection.query("UPDATE products SET ? WHERE ?",
+                [
+                    {
+                        stock_quantity: newQty
+                    },
+                    {
+                        id: answers.itemNum
+                    }
+                ],
+                function(err, result){
+                    if (err) throw err;
+                    console.log(result.affectedRows);
+                })
                 buyItem();
             }
         })
