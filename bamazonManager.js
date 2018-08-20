@@ -65,6 +65,14 @@ function increaseStock(){
                 id: chosenItem.id
             }
         ])
+        console.log(chalk.green("================================================================"));
+        console.log(chalk.green(chosenItem.product_name + " stock quantity changed to " + ans.newStock))
+        console.log(chalk.green("================================================================"));
+        }).then(function(){
+            connection.query("SELECT * FROM products", function(err, result){
+                if (err) throw err;
+                console.table(result)
+            })
         })
     })
     })
