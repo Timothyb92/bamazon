@@ -32,8 +32,41 @@ function viewLowInv(){
 }
 
 function increaseStock(){
+    var chosenItem;
     connection.query("SELECT * FROM products", function(err, res){
     if (err) throw err;
+    console.table(res);
+    inquirer.prompt([
+        {
+            name: "item",
+            type: "input",
+            message: "Which item would you like to adjust the stock qauntity of?"
+        }
+    ]).then(function(answer){
+        for (var i = 0; i < res.length; i++){
+            // console.log(res[i].id)
+            if (res[i].id === parseInt(answer.item)){
+                chosenItem = res[i];
+            }
+        }
+        inquirer.prompt([
+            {
+                name: "newStock",
+                type: "input",
+                message: "What would you like the new quantity to be?"
+            }
+        ]).then(function(ans){
+            connection.query("UPDATE products SET ? WHERE ?",
+        [
+            {
+                stock_quantity: parseInt(ans.newStock)
+            },
+            {
+                id: chosenItem.id
+            }
+        ])
+        })
+    })
     })
 }
 
@@ -43,4 +76,4 @@ function addNewProduct(){
     })
 }
 
-viewLowInv();
+increaseStock();
