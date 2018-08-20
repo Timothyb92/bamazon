@@ -14,12 +14,48 @@ var connection = mysql.createConnection({
     database: "bamazon"
 })
 
+function start(){
+    inquirer.prompt([
+        {
+            name: "choice",
+            type: "list",
+            message: "What would you like to do?",
+            choices: [
+                "View items for sale",
+                "View low inventory",
+                "Change stock quantity of an item",
+                "Add a new product"
+            ]
+        }
+    ]).then(function(ans){
+        switch (ans.choice){
+            case "View items for sale":
+            viewProducts();
+            break;
+
+            case "View low inventory":
+            viewLowInv();
+            break;
+
+            case "Change stock quantity of an item":
+            increaseStock();
+            break;
+
+            case "Add a new product":
+            addNewProduct();
+            break;
+        }
+    })
+}
+
+
 //Functions that displays all products for sale
 function viewProducts(){
     connection.query("SELECT * FROM products", function(err, res){
         if (err) throw err;
         console.table(res);
     })
+    start();
 }
 
 
@@ -29,6 +65,7 @@ function viewLowInv(){
     if (err) throw err;
     console.table(res);
     })
+    start();
 }
 
 function increaseStock(){
@@ -76,12 +113,14 @@ function increaseStock(){
         })
     })
     })
+    start();
 }
 
 function addNewProduct(){
     connection.query("SELECT * FROM products", function(err, res){
     if (err) throw err;
     })
+    start();
 }
 
-increaseStock();
+start();
