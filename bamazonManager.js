@@ -14,16 +14,33 @@ var connection = mysql.createConnection({
     database: "bamazon"
 })
 
-// function start(){
-//     connection.query("SELECT * FROM products", function(err, res){
-//         if (err) throw err;
-//         console.table(res);
-//     })
-// }
-
+//Functions that displays all products for sale
 function viewProducts(){
     connection.query("SELECT * FROM products", function(err, res){
         if (err) throw err;
         console.table(res);
     })
 }
+
+
+//Function that displays products that have a stock quantity that is less than 15
+function viewLowInv(){
+    connection.query("SELECT * FROM products WHERE stock_quantity < 15", function(err, res){
+    if (err) throw err;
+    console.table(res);
+    })
+}
+
+function increaseStock(){
+    connection.query("SELECT * FROM products", function(err, res){
+    if (err) throw err;
+    })
+}
+
+function addNewProduct(){
+    connection.query("SELECT * FROM products", function(err, res){
+    if (err) throw err;
+    })
+}
+
+viewLowInv();
