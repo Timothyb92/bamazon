@@ -54,8 +54,8 @@ function viewProducts(){
     connection.query("SELECT * FROM products", function(err, res){
         if (err) throw err;
         console.table(res);
+        start();
     })
-    start();
 }
 
 
@@ -64,8 +64,8 @@ function viewLowInv(){
     connection.query("SELECT * FROM products WHERE stock_quantity < 15", function(err, res){
     if (err) throw err;
     console.table(res);
-    })
     start();
+    })
 }
 
 function increaseStock(){
@@ -108,19 +108,52 @@ function increaseStock(){
         }).then(function(){
             connection.query("SELECT * FROM products", function(err, result){
                 if (err) throw err;
-                console.table(result)
+                start();
             })
         })
     })
     })
-    start();
 }
 
 function addNewProduct(){
     connection.query("SELECT * FROM products", function(err, res){
     if (err) throw err;
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "newItem",
+            message: "What item would you like to add?"
+        },
+        {
+            type: "input",
+            name: "itemDpt",
+            message: "What department is this item in?"
+        },
+        {
+            type: "input",
+            name: "itemQty",
+            message: "How many of this item would you like to input?"
+        },
+        {
+            type: "input",
+            name: "itemPrice",
+            message: "What is the price of the item?"
+        }
+    ]).then(function(answer){
+        connection.query(
+            "INSERT INTO products SET ?",
+            {
+                product_name: answer.newItem,
+                department_name: answer.itemDpt,
+                price: answer.itemPrice,
+                stock_quantity: answer.itemQty
+            });
+        console.log(chalk.green("===================================================================================================="))
+        console.log(chalk.green("Added " + answer.newItem + " to " + answer.itemDpt + " department with price of " + answer.itemPrice + " and a quantity of " + answer.itemQty));
+        console.log(chalk.green("===================================================================================================="))
+        start();
     })
-    start();
+    })
 }
 
 start();
